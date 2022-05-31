@@ -8,7 +8,6 @@
 import Foundation
 
 struct WeatherData: Codable {
-    let name: String
     let dt: Double
     let main: Main
     let weather: [Weather]

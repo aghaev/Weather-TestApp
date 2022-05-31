@@ -28,7 +28,7 @@ struct DetailedView {
             weatherImage.leftAnchor.constraint(equalTo: stackView.leftAnchor, constant: 80),
             maxTempLabel.leftAnchor.constraint(equalTo: stackView.leftAnchor, constant: 190),
             minTempLabel.leftAnchor.constraint(equalTo: stackView.leftAnchor, constant: 290),
-            weatherImage.heightAnchor.constraint(equalToConstant: 15),
+            weatherImage.heightAnchor.constraint(equalToConstant: 40),
 //            weatherImage.widthAnchor.constraint(equalToConstant: 15)
         ])
         print("NSLayoutConstraint.activate")
