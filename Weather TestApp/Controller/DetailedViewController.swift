@@ -17,19 +17,20 @@ struct DetailedView {
     
     
     func setConstraints() {
-        
-        stackView.axis = .horizontal
+        stackView.axis = .vertical
         stackView.distribution = .fill
-        stackView.alignment = .center
+        stackView.alignment = .fill
+        stackView.spacing = 16
         weatherImage.tintColor = .black
         weatherImage.contentMode = .scaleAspectFit
+        dateLabel.font = UIFont.boldSystemFont(ofSize: 18)
+        maxTempLabel.font = UIFont.boldSystemFont(ofSize: 18)
+        minTempLabel.font = UIFont.boldSystemFont(ofSize: 18)
+        
         
         NSLayoutConstraint.activate([
-            dateLabel.leftAnchor.constraint(equalTo: stackView.leftAnchor, constant: 20),
-            weatherImage.leftAnchor.constraint(equalTo: stackView.leftAnchor, constant: 80),
-            maxTempLabel.leftAnchor.constraint(equalTo: stackView.leftAnchor, constant: 190),
-            minTempLabel.leftAnchor.constraint(equalTo: stackView.leftAnchor, constant: 290),
-            weatherImage.heightAnchor.constraint(equalToConstant: 40)
+            weatherImage.heightAnchor.constraint(equalToConstant: 40),
+            dateLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 80)
         ])
     }
 }

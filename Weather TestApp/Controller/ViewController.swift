@@ -19,21 +19,11 @@ class ViewController: UIViewController {
     @IBOutlet weak var humidity: UILabel!
     @IBOutlet weak var weatherLabel: UIImageView!
     @IBOutlet weak var detailedStackView: UIStackView!
-    
+    @IBOutlet weak var stackView: UIStackView!
     
     var weatherManager = WeatherManager()
     let locationManager = CLLocationManager()
-    var detailedView = DetailedView()
-    let stackView = UIStackView()
-    
-    func increaseCurrentDay(_ day: Int) -> Date {
-        let currentDate = Date()
-        var dateComponent = DateComponents()
-        dateComponent.day = day
-        return Calendar.current.date(byAdding: dateComponent, to: currentDate)!
-    }
-    
-    
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,14 +32,8 @@ class ViewController: UIViewController {
         locationManager.requestWhenInUseAuthorization()
         locationManager.requestLocation()
         
-        updateUI()
         searchTextField.delegate = self
         weatherManager.delegate = self
-        
-        view.addSubview(stackView)
-        setupStackViewConstraints()
-        
-        
     }
     
     //MARK: - Enabling only Portrait mode
@@ -58,33 +42,10 @@ class ViewController: UIViewController {
             return .portrait
         }
     }
-    
-    func updateUI() {
-        let date = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
-        dateFormatter.locale = Locale(identifier: "en_US")
-        dateLabel.text = dateFormatter.string(from: date)
-    }
-    
-    
-    
-    func setupStackViewConstraints() {
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .vertical
-        stackView.distribution = .fillProportionally
-        
-        stackView.topAnchor.constraint(equalTo: detailedStackView.bottomAnchor, constant: 50).isActive = true
-        stackView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
-        stackView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
-        stackView.heightAnchor.constraint(equalToConstant: 40).isActive = true
-    }
-
 }
 
-    
-
 //MARK: - UITextFieldDelegate
+// Detecting user input and making request
 extension ViewController: UITextFieldDelegate {
     
     @IBAction func searchPressed(_ sender: UIButton) {
@@ -116,37 +77,62 @@ extension ViewController: UITextFieldDelegate {
 }
 
 //MARK: - WeatherManagerDelegate
+// Recieving data from WeatherManager and adding them to views elements
 extension ViewController: WeatherManagerDelegate {
-    
     
     func didUpdateWeather(_ weatherManager: WeatherManager, weather: WeatherModel) {
         DispatchQueue.main.async {
+            let formatter = DateFormatter()
+            formatter.setLocalizedDateFormatFromTemplate("dd MMM")
             
-            self.tempLabel.text = weather.temperatureString
+            // Adding values to elements that are defined in storyboard
+            self.dateLabel.text = formatter.string(from: Date())
+            self.tempLabel.text = "\(weather.temperatureString)°C"
             self.weatherLabel.image = UIImage(systemName: weather.conditionName)
             self.cityName.text = weather.cityName
             self.humidity.text = "\(weather.humidity)%"
             self.tempMax.text = "\(weather.temperatureMax)"
             self.tempMin.text = "\(weather.temperatureMin)"
             
-            //TODO: Need to iterate drom [List] and add to each stackview
+            // The locator is triggered twice, the view is duplicated, so stack destroyed before adding elements
+            self.stackView.arrangedSubviews.forEach {
+                self.stackView.removeArrangedSubview($0)
+                $0.removeFromSuperview()
+            }
             
-            for element in weather.list {
+            // Creating stack views programmatically and adding values to their elements
+            for element in self.groupElementsByDate(weather.list) {
                 let date = Date(timeIntervalSince1970: element.dt)
-                print(self.increaseCurrentDay(1), date)
-                if self.increaseCurrentDay(1) == date {
-                    print(self.increaseCurrentDay(1), date)
-                    self.detailedView.dateLabel.text = weather.dateString
-                    self.detailedView.weatherImage.image = UIImage(systemName: weather.conditionName)
-                    self.detailedView.maxTempLabel.text = "↑ \(weather.temperatureMax) °C"
-                    self.detailedView.minTempLabel.text = "↓ \(weather.temperatureMin) °C"
+                let startDate = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: date)!
+                let endDate = Calendar.current.date(byAdding: .day, value: 5, to: startDate)!
+                
+                let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: Calendar.current.startOfDay(for: .init()))!
+                let fiveDaysLater = Calendar.current.date(byAdding: .day, value: 4, to: tomorrow)!
+                
+                if (startDate...endDate).overlaps(tomorrow...fiveDaysLater) {
+                    let detailedView = DetailedView()
+
+                    detailedView.dateLabel.text = formatter.string(from: .init(timeIntervalSince1970: element.dt))
                     
-                    self.detailedView.stackView.addArrangedSubview(self.detailedView.dateLabel)
-                    self.detailedView.stackView.addArrangedSubview(self.detailedView.weatherImage)
-                    self.detailedView.stackView.addArrangedSubview(self.detailedView.maxTempLabel)
-                    self.detailedView.stackView.addArrangedSubview(self.detailedView.minTempLabel)
-                    self.stackView.addArrangedSubview(self.detailedView.stackView)
-                    self.detailedView.setConstraints()
+                    let config = UIImage.SymbolConfiguration(scale: .large)
+                    let image = UIImage(systemName: element.weather.last!.conditionName)
+                    
+                    // Adding values to  elements
+                    detailedView.weatherImage.image = image?.applyingSymbolConfiguration(config)
+                    detailedView.maxTempLabel.text = "↑ \(element.main.tempMaxString) °C"
+                    detailedView.minTempLabel.text = "↓ \(element.main.tempMinString) °C"
+                    
+                    detailedView.stackView.addArrangedSubview(detailedView.dateLabel)
+                    detailedView.stackView.addArrangedSubview(detailedView.weatherImage)
+                    detailedView.stackView.addArrangedSubview(detailedView.maxTempLabel)
+                    detailedView.stackView.addArrangedSubview(detailedView.minTempLabel)
+                    
+                    self.stackView.addArrangedSubview(detailedView.stackView)
+                    self.stackView.axis = .horizontal
+                    self.stackView.distribution = .fillEqually
+                    self.stackView.spacing = 8
+                    
+                    detailedView.setConstraints()
                 }
             }
         }
@@ -155,9 +141,34 @@ extension ViewController: WeatherManagerDelegate {
     func didFailWithError(error: Error) {
         print(error)
     }
+    
+    // Filtering Data, creating dictionary with asosiated value [date : values]
+    private func groupElementsByDate(_ list: [List]) -> [List] {
+        let dateList: [List] = list.map {
+            let date = Calendar.current.startOfDay(for: Date(timeIntervalSince1970: $0.dt))
+            return List(dt: date.timeIntervalSince1970, main: $0.main, weather: $0.weather, dt_txt: $0.dt_txt)
+        }
+        
+        let groupedByDate = Dictionary(grouping: dateList, by: \.dt)
+        let averageByDate: [Double: List] = groupedByDate.mapValues {
+            let average = $0.map(\.main.temp).reduce(0.0, +) / Double($0.count)
+            let min = $0.map(\.main.temp_min).min() ?? 0.0
+            let max = $0.map(\.main.temp_max).max() ?? 0.0
+            let humidity: Double = Double($0.map(\.main.humidity).reduce(0, +)) / Double($0.count)
+            
+            return List(
+                dt: $0.first!.dt,
+                main: .init(temp: average, temp_max: max, temp_min: min, humidity: Int(humidity)),
+                weather: $0.first!.weather,
+                dt_txt: $0.first!.dt_txt
+            )
+        }
+        return Array(averageByDate.values.sorted { $0.dt < $1.dt })
+    }
 }
 
 //MARK: - CLLocationManagerDelegate
+// Detecting user location and making request
 extension ViewController: CLLocationManagerDelegate {
     
     @IBAction func locationBtnPressed(_ sender: UIButton) {
