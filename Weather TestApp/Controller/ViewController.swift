@@ -130,9 +130,7 @@ extension ViewController: WeatherManagerDelegate {
             self.detailedView.stackView.addArrangedSubview(self.detailedView.minTempLabel)
             self.stackView.addArrangedSubview(self.detailedView.stackView)
             
-            print("DispatchQueue.main.async 1")
             self.detailedView.setConstraints()
-            print("DispatchQueue.main.async 2")
         }
     }
     
@@ -146,7 +144,6 @@ extension ViewController: CLLocationManagerDelegate {
     
     @IBAction func locationBtnPressed(_ sender: UIButton) {
         locationManager.requestLocation()
-        print(1)
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
