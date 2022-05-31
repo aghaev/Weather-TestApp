@@ -20,10 +20,18 @@ class ViewController: UIViewController {
     @IBOutlet weak var weatherLabel: UIImageView!
     @IBOutlet weak var detailedStackView: UIStackView!
     
+    
     var weatherManager = WeatherManager()
     let locationManager = CLLocationManager()
     var detailedView = DetailedView()
     let stackView = UIStackView()
+    
+    func increaseCurrentDay(_ day: Int) -> Date {
+        let currentDate = Date()
+        var dateComponent = DateComponents()
+        dateComponent.day = day
+        return Calendar.current.date(byAdding: dateComponent, to: currentDate)!
+    }
     
     
     
@@ -58,6 +66,8 @@ class ViewController: UIViewController {
         dateFormatter.locale = Locale(identifier: "en_US")
         dateLabel.text = dateFormatter.string(from: date)
     }
+    
+    
     
     func setupStackViewConstraints() {
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -119,18 +129,26 @@ extension ViewController: WeatherManagerDelegate {
             self.tempMax.text = "\(weather.temperatureMax)"
             self.tempMin.text = "\(weather.temperatureMin)"
             
-            self.detailedView.dateLabel.text = weather.dateString
-            self.detailedView.weatherImage.image = UIImage(systemName: weather.conditionName)
-            self.detailedView.maxTempLabel.text = "↑ \(weather.temperatureMax) °C"
-            self.detailedView.minTempLabel.text = "↓ \(weather.temperatureMin) °C"
+            //TODO: Need to iterate drom [List] and add to each stackview
             
-            self.detailedView.stackView.addArrangedSubview(self.detailedView.dateLabel)
-            self.detailedView.stackView.addArrangedSubview(self.detailedView.weatherImage)
-            self.detailedView.stackView.addArrangedSubview(self.detailedView.maxTempLabel)
-            self.detailedView.stackView.addArrangedSubview(self.detailedView.minTempLabel)
-            self.stackView.addArrangedSubview(self.detailedView.stackView)
-            
-            self.detailedView.setConstraints()
+            for element in weather.list {
+                let date = Date(timeIntervalSince1970: element.dt)
+                print(self.increaseCurrentDay(1), date)
+                if self.increaseCurrentDay(1) == date {
+                    print(self.increaseCurrentDay(1), date)
+                    self.detailedView.dateLabel.text = weather.dateString
+                    self.detailedView.weatherImage.image = UIImage(systemName: weather.conditionName)
+                    self.detailedView.maxTempLabel.text = "↑ \(weather.temperatureMax) °C"
+                    self.detailedView.minTempLabel.text = "↓ \(weather.temperatureMin) °C"
+                    
+                    self.detailedView.stackView.addArrangedSubview(self.detailedView.dateLabel)
+                    self.detailedView.stackView.addArrangedSubview(self.detailedView.weatherImage)
+                    self.detailedView.stackView.addArrangedSubview(self.detailedView.maxTempLabel)
+                    self.detailedView.stackView.addArrangedSubview(self.detailedView.minTempLabel)
+                    self.stackView.addArrangedSubview(self.detailedView.stackView)
+                    self.detailedView.setConstraints()
+                }
+            }
         }
     }
     
