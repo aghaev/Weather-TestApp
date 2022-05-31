@@ -17,7 +17,7 @@ struct WeatherManager {
     
     var delegate: WeatherManagerDelegate?
     
-    private let API_KEY = "4fbfa6660ea4f06f7cbee5873c70e917"
+    private let API_KEY = ""
     private let url = "https://api.openweathermap.org/data/2.5/"
     
     //api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}
