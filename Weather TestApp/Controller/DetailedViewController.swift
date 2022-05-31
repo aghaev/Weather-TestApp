@@ -25,14 +25,12 @@ struct DetailedView {
         
         NSLayoutConstraint.activate([
             dateLabel.leftAnchor.constraint(equalTo: stackView.leftAnchor, constant: 20),
-            weatherImage.leftAnchor.constraint(equalTo: stackView.leftAnchor, constant: 110),
-            maxTempLabel.leftAnchor.constraint(equalTo: stackView.leftAnchor, constant: 200),
-            minTempLabel.leftAnchor.constraint(equalTo: stackView.leftAnchor, constant: 250),
-            weatherImage.heightAnchor.constraint(equalToConstant: 40),
-            weatherImage.widthAnchor.constraint(equalToConstant: 40)
+            weatherImage.leftAnchor.constraint(equalTo: stackView.leftAnchor, constant: 80),
+            maxTempLabel.leftAnchor.constraint(equalTo: stackView.leftAnchor, constant: 190),
+            minTempLabel.leftAnchor.constraint(equalTo: stackView.leftAnchor, constant: 290),
+            weatherImage.heightAnchor.constraint(equalToConstant: 15),
+//            weatherImage.widthAnchor.constraint(equalToConstant: 15)
         ])
         print("NSLayoutConstraint.activate")
-        
-        
     }
 }

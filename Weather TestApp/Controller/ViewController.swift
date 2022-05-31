@@ -25,6 +25,8 @@ class ViewController: UIViewController {
     var detailedView = DetailedView()
     let stackView = UIStackView()
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -35,7 +37,11 @@ class ViewController: UIViewController {
         updateUI()
         searchTextField.delegate = self
         weatherManager.delegate = self
-       
+        
+        view.addSubview(stackView)
+        setupStackViewConstraints()
+        
+        
     }
     
     //MARK: - Enabling only Portrait mode
@@ -52,8 +58,21 @@ class ViewController: UIViewController {
         dateFormatter.locale = Locale(identifier: "en_US")
         dateLabel.text = dateFormatter.string(from: date)
     }
+    
+    func setupStackViewConstraints() {
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.distribution = .fillProportionally
+        
+        stackView.topAnchor.constraint(equalTo: detailedStackView.bottomAnchor, constant: 50).isActive = true
+        stackView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
+        stackView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
+        stackView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+    }
+
 }
 
+    
 
 //MARK: - UITextFieldDelegate
 extension ViewController: UITextFieldDelegate {
@@ -102,25 +121,15 @@ extension ViewController: WeatherManagerDelegate {
             
             self.detailedView.dateLabel.text = weather.dateString
             self.detailedView.weatherImage.image = UIImage(systemName: weather.conditionName)
-            self.detailedView.maxTempLabel.text = "\(weather.temperatureMax)"
-            self.detailedView.minTempLabel.text = "\(weather.temperatureMin)"
-            
-            
-            self.stackView.translatesAutoresizingMaskIntoConstraints = false
-            self.stackView.axis = .vertical
-            self.stackView.distribution = .fillProportionally
-            
+            self.detailedView.maxTempLabel.text = "↑ \(weather.temperatureMax) °C"
+            self.detailedView.minTempLabel.text = "↓ \(weather.temperatureMin) °C"
             
             self.detailedView.stackView.addArrangedSubview(self.detailedView.dateLabel)
             self.detailedView.stackView.addArrangedSubview(self.detailedView.weatherImage)
             self.detailedView.stackView.addArrangedSubview(self.detailedView.maxTempLabel)
             self.detailedView.stackView.addArrangedSubview(self.detailedView.minTempLabel)
             self.stackView.addArrangedSubview(self.detailedView.stackView)
-            self.view.addSubview(self.stackView)
-            self.stackView.topAnchor.constraint(equalTo: self.detailedStackView.bottomAnchor, constant: 50).isActive = true
-            self.stackView.leftAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leftAnchor).isActive = true
-            self.stackView.rightAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.rightAnchor).isActive = true
-            self.stackView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+            
             print("DispatchQueue.main.async 1")
             self.detailedView.setConstraints()
             print("DispatchQueue.main.async 2")
