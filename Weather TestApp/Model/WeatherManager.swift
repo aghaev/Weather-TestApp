@@ -2,7 +2,7 @@
 //  WeatherManager.swift
 //  Weather Test App
 //
-//  Created by Alikhan Aghazade on 29.05.22.
+//  Created by Aydin Aghayev on 05/27/22.
 //
 
 import Foundation
