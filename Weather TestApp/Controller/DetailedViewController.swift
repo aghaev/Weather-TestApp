@@ -24,8 +24,11 @@ struct DetailedView {
         weatherImage.tintColor = .black
         weatherImage.contentMode = .scaleAspectFit
         dateLabel.font = UIFont.boldSystemFont(ofSize: 18)
+        dateLabel.textAlignment = .center
         maxTempLabel.font = UIFont.boldSystemFont(ofSize: 18)
+        maxTempLabel.textAlignment = .center
         minTempLabel.font = UIFont.boldSystemFont(ofSize: 18)
+        minTempLabel.textAlignment = .center
         
         
         NSLayoutConstraint.activate([

@@ -53,7 +53,6 @@
 			isa = PBXGroup;
 			children = (
 				04E445242844FB990087488D /* Weather TestApp */,
-				04E445232844FB990087488D /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -63,6 +62,7 @@
 				04E445222844FB990087488D /* Weather TestApp.app */,
 			);
 			name = Products;
+			path = ../..;
 			sourceTree = "<group>";
 		};
 		04E445242844FB990087488D /* Weather TestApp */ = {
@@ -88,6 +88,7 @@
 				04E4453E2844FC790087488D /* WeatherData.swift */,
 				04E4453F2844FC790087488D /* WeatherForecastData.swift */,
 				04E445402844FC790087488D /* WeatherModel.swift */,
+				04E445232844FB990087488D /* Products */,
 			);
 			path = Model;
 			sourceTree = "<group>";

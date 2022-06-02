@@ -112,15 +112,16 @@ extension ViewController: WeatherManagerDelegate {
                 if (startDate...endDate).overlaps(tomorrow...fiveDaysLater) {
                     let detailedView = DetailedView()
 
-                    detailedView.dateLabel.text = formatter.string(from: .init(timeIntervalSince1970: element.dt))
+                    
                     
                     let config = UIImage.SymbolConfiguration(scale: .large)
                     let image = UIImage(systemName: element.weather.last!.conditionName)
                     
                     // Adding values to  elements
+                    detailedView.dateLabel.text = formatter.string(from: .init(timeIntervalSince1970: element.dt))
                     detailedView.weatherImage.image = image?.applyingSymbolConfiguration(config)
-                    detailedView.maxTempLabel.text = "↑ \(element.main.tempMaxString) °C"
-                    detailedView.minTempLabel.text = "↓ \(element.main.tempMinString) °C"
+                    detailedView.maxTempLabel.text = "\(element.main.tempMaxString) °C"
+                    detailedView.minTempLabel.text = "\(element.main.tempMinString) °C"
                     
                     detailedView.stackView.addArrangedSubview(detailedView.dateLabel)
                     detailedView.stackView.addArrangedSubview(detailedView.weatherImage)
@@ -130,7 +131,7 @@ extension ViewController: WeatherManagerDelegate {
                     self.stackView.addArrangedSubview(detailedView.stackView)
                     self.stackView.axis = .horizontal
                     self.stackView.distribution = .fillEqually
-                    self.stackView.spacing = 8
+                    self.stackView.spacing = 0
                     
                     detailedView.setConstraints()
                 }
@@ -163,7 +164,7 @@ extension ViewController: WeatherManagerDelegate {
                 dt_txt: $0.first!.dt_txt
             )
         }
-        return Array(averageByDate.values.sorted { $0.dt < $1.dt })
+        return Array(averageByDate.values.sorted { $0.dt < $1.dt }.dropFirst())
     }
 }
 
