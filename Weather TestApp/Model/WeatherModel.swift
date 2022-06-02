@@ -2,7 +2,7 @@
 //  WeatherModel.swift
 //  Weather Test App
 //
-//  Created by Alikhan Aghazade on 30.05.22.
+//  Created by Aydin Aghayev on 05/27/22.
 //
 
 import Foundation
@@ -28,7 +28,6 @@ struct WeatherModel {
         return "\(dateFormatter.string(from: dateString).dropLast(6))"
     }
     
-    
     var temperatureString: String {
         return String(format: "%.0f", temperature)
     }
@@ -36,19 +35,25 @@ struct WeatherModel {
     var conditionName: String {
         switch conditionId {
         case 200...232:
-            return "cloud.bolt"
+            return "cloud.bolt.rain"
         case 300...321:
             return "cloud.drizzle"
         case 500...531:
-            return "cloud.rain"
+            return "cloud.sun.rain"
         case 600...622:
-            return "cloud.snow"
+            return "snowflake"
         case 701...781:
-            return "cloud.fog"
+            return "sun.dust"
         case 800:
             return "sun.max"
-        case 801...804:
-            return "cloud.bolt"
+        case 801:
+            return "cloud.sun"
+        case 802:
+            return "cloud"
+        case 803:
+            return "smoke"
+        case 804:
+            return "smoke"
         default:
             return "cloud"
         }

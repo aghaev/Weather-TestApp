@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  Weather Test App
 //
-//  Created by Aydin Aghayev on 27.05.22.
+//  Created by Aydin Aghayev on 05/27/22
 //
 
 import UIKit
@@ -23,10 +23,13 @@ class ViewController: UIViewController {
     
     var weatherManager = WeatherManager()
     let locationManager = CLLocationManager()
+    
+    let formatter = DateFormatter()
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        formatter.setLocalizedDateFormatFromTemplate("dd MMM")
         
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
@@ -82,11 +85,9 @@ extension ViewController: WeatherManagerDelegate {
     
     func didUpdateWeather(_ weatherManager: WeatherManager, weather: WeatherModel) {
         DispatchQueue.main.async {
-            let formatter = DateFormatter()
-            formatter.setLocalizedDateFormatFromTemplate("dd MMM")
             
             // Adding values to elements that are defined in storyboard
-            self.dateLabel.text = formatter.string(from: Date())
+            self.dateLabel.text = self.formatter.string(from: Date())
             self.tempLabel.text = "\(weather.temperatureString)°C"
             self.weatherLabel.image = UIImage(systemName: weather.conditionName)
             self.cityName.text = weather.cityName
@@ -94,48 +95,65 @@ extension ViewController: WeatherManagerDelegate {
             self.tempMax.text = "\(weather.temperatureMax)"
             self.tempMin.text = "\(weather.temperatureMin)"
             
-            // The locator is triggered twice, the view is duplicated, so stack destroyed before adding elements
+            self.changeBackgroundColor(weather.temperature)
+            
+            // The locator is triggered every time the system adds new elements to the array, so we clear the nested views before adding a new one.
             self.stackView.arrangedSubviews.forEach {
                 self.stackView.removeArrangedSubview($0)
                 $0.removeFromSuperview()
             }
             
             // Creating stack views programmatically and adding values to their elements
-            for element in self.groupElementsByDate(weather.list) {
-                let date = Date(timeIntervalSince1970: element.dt)
-                let startDate = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: date)!
-                let endDate = Calendar.current.date(byAdding: .day, value: 5, to: startDate)!
-                
-                let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: Calendar.current.startOfDay(for: .init()))!
-                let fiveDaysLater = Calendar.current.date(byAdding: .day, value: 4, to: tomorrow)!
-                
-                if (startDate...endDate).overlaps(tomorrow...fiveDaysLater) {
-                    let detailedView = DetailedView()
+            self.addVStackToHstack(weather.list)
+        }
+    }
+    
+    func addVStackToHstack(_ list: [List]) {
+        for element in self.groupElementsByDate(list) {
+            
+            let date = Date(timeIntervalSince1970: element.dt)
+            let startDate = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: date)!
+            let endDate = Calendar.current.date(byAdding: .day, value: 5, to: startDate)!
+            
+            let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: Calendar.current.startOfDay(for: .init()))!
+            let fiveDaysLater = Calendar.current.date(byAdding: .day, value: 4, to: tomorrow)!
+            
+            if (startDate...endDate).overlaps(tomorrow...fiveDaysLater) {
+                let detailedView = DetailedView()
 
-                    
-                    
-                    let config = UIImage.SymbolConfiguration(scale: .large)
-                    let image = UIImage(systemName: element.weather.last!.conditionName)
-                    
-                    // Adding values to  elements
-                    detailedView.dateLabel.text = formatter.string(from: .init(timeIntervalSince1970: element.dt))
-                    detailedView.weatherImage.image = image?.applyingSymbolConfiguration(config)
-                    detailedView.maxTempLabel.text = "\(element.main.tempMaxString) °C"
-                    detailedView.minTempLabel.text = "\(element.main.tempMinString) °C"
-                    
-                    detailedView.stackView.addArrangedSubview(detailedView.dateLabel)
-                    detailedView.stackView.addArrangedSubview(detailedView.weatherImage)
-                    detailedView.stackView.addArrangedSubview(detailedView.maxTempLabel)
-                    detailedView.stackView.addArrangedSubview(detailedView.minTempLabel)
-                    
-                    self.stackView.addArrangedSubview(detailedView.stackView)
-                    self.stackView.axis = .horizontal
-                    self.stackView.distribution = .fillEqually
-                    self.stackView.spacing = 0
-                    
-                    detailedView.setConstraints()
-                }
+                let config = UIImage.SymbolConfiguration(scale: .large)
+                // Adding values to  elements
+                detailedView.dateLabel.text = formatter.string(from: .init(timeIntervalSince1970: element.dt))
+                detailedView.weatherImage.image = UIImage(systemName: element.weather.last!.conditionName)?.applyingSymbolConfiguration(config)
+                detailedView.maxTempLabel.text = "\(element.main.tempMaxString) °C"
+                detailedView.minTempLabel.text = "\(element.main.tempMinString) °C"
+                
+                detailedView.stackView.addArrangedSubview(detailedView.dateLabel)
+                detailedView.stackView.addArrangedSubview(detailedView.weatherImage)
+                detailedView.stackView.addArrangedSubview(detailedView.maxTempLabel)
+                detailedView.stackView.addArrangedSubview(detailedView.minTempLabel)
+                
+                stackView.addArrangedSubview(detailedView.stackView)
+                configureHStackView()
+                
+                detailedView.setConstraints()
             }
+        }
+    }
+    
+    func configureHStackView() {
+       stackView.axis = .horizontal
+       stackView.distribution = .fillEqually
+       stackView.spacing = 0
+    }
+    
+    func changeBackgroundColor(_ temp: Double) {
+        if temp > 17.0 {
+            view.backgroundColor = UIColor(named: "WarmColor")
+            searchTextField.backgroundColor = UIColor(named: "WarmColor")
+        } else {
+            view.backgroundColor = UIColor(named: "ColdColor")
+            searchTextField.backgroundColor = UIColor(named: "ColdColor")
         }
     }
     

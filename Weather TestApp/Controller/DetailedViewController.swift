@@ -2,7 +2,7 @@
 //  DetailedViewController.swift
 //  Weather TestApp
 //
-//  Created by Mac on 5/30/22.
+//  Created by Aydin Aghayev on 5/30/22.
 //
 
 import UIKit
