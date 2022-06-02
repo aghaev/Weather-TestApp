@@ -34,8 +34,6 @@ struct WeatherManager {
         performForecastRequest(with: urlString)
     }
     
-    
-    
     func performForecastRequest(with urlString: String) {
         if let url = URL(string: urlString) {
             let session = URLSession(configuration: .default)

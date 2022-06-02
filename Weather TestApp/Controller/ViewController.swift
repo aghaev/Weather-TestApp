@@ -26,7 +26,6 @@ class ViewController: UIViewController {
     
     let formatter = DateFormatter()
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         formatter.setLocalizedDateFormatFromTemplate("dd MMM")

@@ -15,7 +15,6 @@ struct DetailedView {
     var maxTempLabel = UILabel()
     var minTempLabel = UILabel()
     
-    
     func setConstraints() {
         stackView.axis = .vertical
         stackView.distribution = .fill
