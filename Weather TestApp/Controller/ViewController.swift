@@ -148,12 +148,20 @@ extension ViewController: WeatherManagerDelegate {
     }
     
     func changeBackgroundColor(_ temp: Double) {
-        if temp > 17.0 {
-            view.backgroundColor = UIColor(named: "WarmColor")
-            searchTextField.backgroundColor = UIColor(named: "WarmColor")
-        } else {
-            view.backgroundColor = UIColor(named: "ColdColor")
-            searchTextField.backgroundColor = UIColor(named: "ColdColor")
+        
+        switch temp {
+        case -100.0...12.0:
+            view.backgroundColor = K.Color.coldColor
+            searchTextField.backgroundColor = K.Color.coldColor
+        case 12.01...22.0:
+            view.backgroundColor = K.Color.normColor
+            searchTextField.backgroundColor = K.Color.normColor
+        case 22.01...55.0:
+            view.backgroundColor = K.Color.hotColor
+            searchTextField.backgroundColor = K.Color.hotColor
+        default:
+            view.backgroundColor = K.Color.hotColor
+            searchTextField.backgroundColor = K.Color.hotColor
         }
     }
     
