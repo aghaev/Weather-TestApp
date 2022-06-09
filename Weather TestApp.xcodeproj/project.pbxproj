@@ -3,10 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		042F8C232852876C0050CC2C /* K.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F8C222852876C0050CC2C /* K.swift */; };
+		048B79722851E723002153AB /* SwiftDate in Frameworks */ = {isa = PBXBuildFile; productRef = 048B79712851E723002153AB /* SwiftDate */; };
 		04E445262844FB990087488D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E445252844FB990087488D /* AppDelegate.swift */; };
 		04E445282844FB990087488D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E445272844FB990087488D /* SceneDelegate.swift */; };
 		04E4452A2844FB990087488D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E445292844FB990087488D /* ViewController.swift */; };
@@ -20,7 +22,21 @@
 		04E4454C284517060087488D /* DetailedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E4454B284517060087488D /* DetailedViewController.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		048B796F2851E66E002153AB /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		042F8C222852876C0050CC2C /* K.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = K.swift; sourceTree = "<group>"; };
 		04E445222844FB990087488D /* Weather TestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Weather TestApp.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		04E445252844FB990087488D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		04E445272844FB990087488D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -41,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				048B79722851E723002153AB /* SwiftDate in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,6 +92,7 @@
 				04E445332844FB9A0087488D /* LaunchScreen.storyboard */,
 				04E445362844FB9A0087488D /* Info.plist */,
 				04E4452E2844FB990087488D /* Weather_TestApp.xcdatamodeld */,
+				042F8C222852876C0050CC2C /* K.swift */,
 			);
 			path = "Weather TestApp";
 			sourceTree = "<group>";
@@ -117,12 +135,16 @@
 				04E4451E2844FB990087488D /* Sources */,
 				04E4451F2844FB990087488D /* Frameworks */,
 				04E445202844FB990087488D /* Resources */,
+				048B796F2851E66E002153AB /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = "Weather TestApp";
+			packageProductDependencies = (
+				048B79712851E723002153AB /* SwiftDate */,
+			);
 			productName = "Weather TestApp";
 			productReference = 04E445222844FB990087488D /* Weather TestApp.app */;
 			productType = "com.apple.product-type.application";
@@ -150,6 +172,9 @@
 				Base,
 			);
 			mainGroup = 04E445192844FB990087488D;
+			packageReferences = (
+				048B79702851E723002153AB /* XCRemoteSwiftPackageReference "SwiftDate" */,
+			);
 			productRefGroup = 04E445232844FB990087488D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -177,6 +202,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				042F8C232852876C0050CC2C /* K.swift in Sources */,
 				04E445302844FB990087488D /* Weather_TestApp.xcdatamodeld in Sources */,
 				04E4452A2844FB990087488D /* ViewController.swift in Sources */,
 				04E445412844FC790087488D /* WeatherManager.swift in Sources */,
@@ -386,6 +412,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		048B79702851E723002153AB /* XCRemoteSwiftPackageReference "SwiftDate" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/malcommac/SwiftDate";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 6.3.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		048B79712851E723002153AB /* SwiftDate */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 048B79702851E723002153AB /* XCRemoteSwiftPackageReference "SwiftDate" */;
+			productName = SwiftDate;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		04E4452E2844FB990087488D /* Weather_TestApp.xcdatamodeld */ = {

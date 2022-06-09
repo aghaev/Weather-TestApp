@@ -17,20 +17,13 @@ struct WeatherManager {
     
     var delegate: WeatherManagerDelegate?
     
-    private let API_KEY = ""
-    private let url = "https://api.openweathermap.org/data/2.5/"
-    
-    //api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}
-    //api.openweathermap.org/data/2.5/weather?q=London&appid={API key}
-    //40.587518116908925, 49.65305325525847
-    
     func fetchWeather(cityName: String) {
-        let urlString = "\(url)forecast?q=\(cityName)&appid=\(API_KEY)&units=metric"
+        let urlString = "\(K.url)forecast?q=\(cityName)&appid=\(K.apiKey)&units=metric"
         performForecastRequest(with: urlString)
     }
     
     func fetchWeather(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
-        let urlString = "\(url)forecast?lat=\(latitude)&lon=\(longitude)&appid=\(API_KEY)&units=metric"
+        let urlString = "\(K.url)forecast?lat=\(latitude)&lon=\(longitude)&appid=\(K.apiKey)&units=metric"
         performForecastRequest(with: urlString)
     }
     

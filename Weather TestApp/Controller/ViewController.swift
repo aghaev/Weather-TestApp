@@ -7,6 +7,7 @@
 
 import UIKit
 import CoreLocation
+import SwiftDate
 
 class ViewController: UIViewController {
     
@@ -181,7 +182,26 @@ extension ViewController: WeatherManagerDelegate {
                 dt_txt: $0.first!.dt_txt
             )
         }
-        return Array(averageByDate.values.sorted { $0.dt < $1.dt }.dropFirst())
+        
+        //getting first date after sorting
+        let unixDateOfFirstElementList = averageByDate.keys.sorted { $0 < $1 }.first
+        // creating date from unix timestamp
+        let date = Date(timeIntervalSince1970: unixDateOfFirstElementList!)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = DateFormatter.Style.medium //Set date
+        let localDate = "\(dateFormatter.string(from: date).dropLast(9))"
+        
+        //crating today variable
+        let qdate = Date()
+        let calendar = Calendar.current
+        let day = String(calendar.component(.day, from: qdate))
+        
+        //comparing if JSON response containing today date, if it does removing them
+        if localDate == day {
+            return Array(averageByDate.values.sorted { $0.dt < $1.dt }.dropFirst())
+        } else {
+            return Array(averageByDate.values.sorted { $0.dt < $1.dt })
+        }
     }
 }
 
